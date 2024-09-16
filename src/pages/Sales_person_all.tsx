@@ -20,7 +20,7 @@ const Sales_personAll = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${api_url}/api/salespersons/getall`, {
+      const response = await fetch(`${api_url}/api/sales_person/getall`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

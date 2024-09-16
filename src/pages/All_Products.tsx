@@ -84,7 +84,7 @@ const All_Products: React.FC = () => {
               >
                 {product.isAvailable ? (
                   <>
-                    <FaRegCheckCircle className="mr-2" />
+                    <FaRegCheckCircle className="mr-2 " />
                     Available
                   </>
                 ) : (
