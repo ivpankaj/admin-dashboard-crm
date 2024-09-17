@@ -192,10 +192,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               <li>
                 <NavLink
-                  to="/dashboard/settings"
+                  to="/dashboard/products"
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-gray-900 dark:text-gray-100 duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                    pathname === '/dashboard/settings' &&
+                    pathname === '/dashboard/allproducts' &&
                     'bg-gray-100 dark:bg-gray-700'
                   }`}
                 >
