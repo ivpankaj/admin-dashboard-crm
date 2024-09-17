@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { InformationCircleIcon, CheckCircleIcon, ExclamationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+const api_url = import.meta.env.VITE_API_URL;
+
 
 interface NotificationType {
   id: number;
@@ -16,7 +18,7 @@ const NotificationList: React.FC = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/notifications/getall');
+        const response = await fetch(`${api_url}api/notifications/getall`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

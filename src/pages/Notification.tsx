@@ -8,6 +8,7 @@ const Notification: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const api_url = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +17,7 @@ const Notification: React.FC = () => {
     setSuccess(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/notifications/create', {
+      const response = await fetch(`${api_url}/api/notifications/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

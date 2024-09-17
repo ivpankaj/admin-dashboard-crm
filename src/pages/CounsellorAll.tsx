@@ -3,6 +3,7 @@ import { FaUserTie, FaEnvelope, FaPhone, FaDollarSign, FaMapMarkerAlt } from "re
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 const api_url = import.meta.env.VITE_API_URL;
+
 type Counselor = {
   id: number;
   name: string;
@@ -22,17 +23,22 @@ type Counselor = {
   feedbackRating: number | null;
 };
 
+type ProfilePics = {
+  [key: number]: string; // Store profile picture URLs by counselor ID
+};
+
 const CounselorAll = () => {
   const [alldata, setData] = useState<Counselor[]>([]);
+  const [profilePics, setProfilePics] = useState<ProfilePics>({});
   const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate(); // Hook to handle navigation
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`${api_url}/api/counselor/getAll`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -40,12 +46,28 @@ const CounselorAll = () => {
         const data: Counselor[] = await response.json();
         console.log(data);
         setData(shuffleArray(data));
+        fetchProfilePictures(data); // Fetch profile pictures after counselor data is loaded
       }
       setLoading(false); // Stop loading when data is fetched
     };
 
     fetchData();
   }, []);
+
+  // Fetch profile pictures for all counselors
+  const fetchProfilePictures = async (counselors: Counselor[]) => {
+    const newProfilePics: ProfilePics = {};
+
+    for (const counselor of counselors) {
+      const response = await fetch(`http://localhost:5000/employee/get/profilepic/${counselor.id}`);
+      if (response.ok) {
+        const { profilePicture } = await response.json();
+        newProfilePics[counselor.id] = profilePicture;
+      }
+    }
+
+    setProfilePics(newProfilePics); // Update state with fetched profile pictures
+  };
 
   const shuffleArray = (array: Counselor[]): Counselor[] => {
     return array.sort(() => Math.random() - 0.5);
@@ -72,10 +94,21 @@ const CounselorAll = () => {
               className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1"
             >
               <div className="flex items-center mb-4">
-                <FaUserTie className="text-5xl" />
-                <div className="ml-4">
+                {/* Display profile picture */}
+                {profilePics[counselor.id] ? (
+                  <img
+                    src={profilePics[counselor.id]}
+                    alt={`${counselor.name}'s profile`}
+                    className="w-16 h-16 rounded-full object-cover mr-4"
+                  />
+                ) : (
+                  <FaUserTie className="text-5xl mr-4" />
+                )}
+                <div>
                   <h3 className="text-2xl font-bold">{counselor.name}</h3>
-                  <p className="text-sm">{counselor.jobTitle} - {counselor.department}</p>
+                  <p className="text-sm">
+                    {counselor.jobTitle} - {counselor.department}
+                  </p>
                 </div>
               </div>
               <div className="space-y-2 text-base">
