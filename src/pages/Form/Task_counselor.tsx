@@ -136,8 +136,8 @@ const Task_counselor = () => {
           >
             <option value="" disabled>Select a counselor</option>
             {counselors.map((counselor) => (
-              <option key={counselor.id} value={counselor.id}>
-                {counselor.name}
+              <option key={counselor.counselorId} value={counselor.counselorId}>
+                {counselor.counselorId}
               </option>
             ))}
           </select>

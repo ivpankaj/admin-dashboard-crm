@@ -6,7 +6,7 @@ interface Task {
     id: number;
     taskName: string;
     description: string;
-    status: string;
+    priority: string;
     dueDate: string;
     employeeId: string;
     createdAt: string;
@@ -20,7 +20,7 @@ const Taskall_employee: React.FC = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await fetch(`${api_url}/api/task_employee/getall`);
+                const response = await fetch(`${api_url}/api/tasks/employee/getall`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -50,6 +50,9 @@ const Taskall_employee: React.FC = () => {
                             <p className="text-gray-700 mb-2">{task.description}</p>
                             <p className="text-gray-500 mb-2">
                                 Status: <span className="font-medium">{task.status}</span>
+                            </p>
+                            <p className="text-gray-500 mb-2">
+                                EmployeeID: <span className="font-medium">{task.employeeId}</span>
                             </p>
                             <p className="text-gray-500 mb-4">
                                 Due Date: <span className="font-medium">{task.dueDate}</span>
