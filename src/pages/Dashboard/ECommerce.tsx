@@ -137,7 +137,7 @@ const ECommerce: React.FC = () => {
             <li>Generated weekly sales report - 5 hours ago</li>
           </ul>
         </div>
-
+        <Link to="/dashboard/notification">
         <div className="dark:bg-black rounded-3xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
           <h3 className="text-lg font-semibold mb-4">Notifications</h3>
           <div className="flex items-center space-x-4">
@@ -145,6 +145,7 @@ const ECommerce: React.FC = () => {
             <p className="text-gray-400">3 new notifications</p>
           </div>
         </div>
+        </Link>
       </div>
 
       {/* Map Section */}

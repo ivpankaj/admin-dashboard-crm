@@ -33,7 +33,8 @@ import Taskall_counsellor from './Taskall_counsellor';
 import Taskall_sales_person from './Taskall_sales_person';
 import ProductForm from './Form/ProductForm';
 import TotalSales from './TotalSales';
-import Activeuser from './Activeuser'
+import Activeuser from './Activeuser';
+import Notification from './Notification';
 
 const Main = () => {
   return (
@@ -307,6 +308,15 @@ const Main = () => {
             <>
               <PageTitle title="Attendance" />
               <Products />
+            </>
+          }
+        />
+        <Route
+          path="/notification"
+          element={
+            <>
+              <PageTitle title="Attendance" />
+              <Notification/>
             </>
           }
         />
