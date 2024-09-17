@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaBell, FaUser, FaCommentDots, FaPaperPlane } from 'react-icons/fa'; // FontAwesome icons
+import { FaBell, FaUser, FaCommentDots, FaPaperPlane } from 'react-icons/fa';
 
 const Notification: React.FC = () => {
   const [sendBy, setSendBy] = useState('');
@@ -14,8 +14,7 @@ const Notification: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccess(null);
-
+    setSuccess(null); 
     try {
       const response = await fetch(`${api_url}/api/notifications/create`, {
         method: 'POST',
@@ -24,18 +23,15 @@ const Notification: React.FC = () => {
         },
         body: JSON.stringify({ title: sendBy, type: sendTo, message }),
       });
-
       if (!response.ok) {
         throw new Error('Failed to send notification');
       }
-
       const result = await response.json();
       setSuccess('Notification sent successfully!');
-      // Clear fields after successful submission
       setSendBy('');
       setSendTo('');
       setMessage('');
-    } catch (error) {
+    } catch (error:any) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -43,11 +39,10 @@ const Notification: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100">
+    <div className="flex items-center justify-center min-h-screen ">
       <div className="w-full max-w-md p-6 bg-white shadow-xl rounded-lg">
         <h2 className="text-3xl font-semibold mb-4 text-center text-indigo-600">Send Notification</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Send By (Title) */}
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-600 mb-2">Title</label>
             <input
@@ -60,8 +55,6 @@ const Notification: React.FC = () => {
             />
             <FaUser className="absolute left-3 top-11 text-indigo-500 text-xl" />
           </div>
-
-          {/* Notification Type */}
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-600 mb-2">Notification Type</label>
             <select
@@ -78,8 +71,6 @@ const Notification: React.FC = () => {
             </select>
             <FaBell className="absolute left-3 top-11 text-indigo-500 text-xl" />
           </div>
-
-          {/* Message */}
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-600 mb-2">Message</label>
             <textarea
@@ -92,8 +83,6 @@ const Notification: React.FC = () => {
             />
             <FaCommentDots className="absolute left-3 top-11 text-indigo-500 text-xl" />
           </div>
-
-          {/* Submit Button */}
           <div>
             <button
               type="submit"

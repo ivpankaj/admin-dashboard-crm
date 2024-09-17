@@ -5,28 +5,25 @@ import {
   FaCalendar,
   FaUserTie,
   FaUser,
-  FaCog,
   FaArrowLeft,
   FaClipboardList,
   FaChalkboardTeacher,
   FaMoneyBillWave,
   FaCalendarAlt,
-  FaPhoneAlt, // Imported icon for Calls
-  FaComments, // Imported icon for Chat
+  FaPhoneAlt,
+  FaComments,
 } from 'react-icons/fa';
-
+import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
+import { PiCurrencyInrBold } from 'react-icons/pi';
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
-
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
-
   const trigger = useRef<HTMLButtonElement | null>(null);
   const sidebar = useRef<HTMLElement | null>(null);
-
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
@@ -87,7 +84,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         >
           <FaArrowLeft size={24} />
         </button>
-
         {sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(false)}
@@ -97,14 +93,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </button>
         )}
       </div>
-
       <div className="flex flex-col overflow-y-auto">
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-gray-900 dark:text-gray-100">
               MENU
             </h3>
-
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
                 <NavLink
@@ -118,7 +112,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Dashboard
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/dashboard/calendar"
@@ -132,7 +125,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Calendar
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/dashboard/employee"
@@ -146,7 +138,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Employee
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/dashboard/counselor"
@@ -160,7 +151,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Counselor
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/dashboard/sales"
@@ -174,7 +164,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Sales Person
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/dashboard/attendance"
@@ -188,7 +177,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Attendance
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/dashboard/profile"
@@ -202,18 +190,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Profile
                 </NavLink>
               </li>
-
               <li>
                 <NavLink
-                  to="/dashboard/settings"
+                  to="/dashboard/products"
                   onClick={handleMenuClick}
                   className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-gray-900 dark:text-gray-100 duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                    pathname === '/dashboard/settings' &&
+                    pathname === '/dashboard/allproducts' &&
                     'bg-gray-100 dark:bg-gray-700'
                   }`}
                 >
-                  <FaCog className="text-lg text-red-600 dark:text-red-400" />
-                  Settings
+                  <MdOutlineProductionQuantityLimits className="text-lg text-purple-400 dark:text-purple-400" />
+                  Products
                 </NavLink>
               </li>
               <li>
@@ -229,7 +216,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Calls
                 </NavLink>
               </li>
-
+              <li>
+                <NavLink
+                  to="/dashboard/sales"
+                  onClick={handleMenuClick}
+                  className={`group relative flex items-center gap-2.5 rounded-3xl py-2 px-4 font-medium text-gray-900 dark:text-gray-100 duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                    pathname === '/dashboard/chat' &&
+                    'bg-gray-100 dark:bg-gray-700'
+                  }`}
+                >
+                  <PiCurrencyInrBold className="text-lg text-green-400 dark:text-green-400" />
+                  Sales
+                </NavLink>
+              </li>
               <li>
                 <NavLink
                   to="/dashboard/chat"
