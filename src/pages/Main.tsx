@@ -34,6 +34,7 @@ import ProductForm from './Form/ProductForm';
 import TotalSales from './TotalSales';
 import Activeuser from './Activeuser';
 import Notification from './Notification';
+import Viewallnotification from './viewallnotfication'
 
 const Main = () => {
   return (
@@ -54,6 +55,15 @@ const Main = () => {
             <>
               <PageTitle title="Calendar " />
               <Calendar />
+            </>
+          }
+        />
+         <Route
+          path="/viewnotification"
+          element={
+            <>
+              <PageTitle title="Calendar " />
+              <Viewallnotification />
             </>
           }
         />
@@ -111,7 +121,6 @@ const Main = () => {
             </>
           }
         />
-
         <Route
           path="/customerengagement"
           element={

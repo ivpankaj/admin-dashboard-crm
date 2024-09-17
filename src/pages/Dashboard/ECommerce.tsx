@@ -138,7 +138,7 @@ const ECommerce: React.FC = () => {
           </ul>
         </div>
         <Link to="/dashboard/notification">
-        <div className="dark:bg-black rounded-3xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
+        <div className="dark:bg-black rounded-3xl shadow-md p-13 hover:shadow-xl transition-shadow duration-300">
           <h3 className="text-lg font-semibold mb-4">Notifications</h3>
           <div className="flex items-center space-x-4">
             <FaBell className="text-3xl text-orange-400" />
