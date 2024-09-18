@@ -1,61 +1,115 @@
-import { FaUsers, FaUserPlus, FaTasks, FaList } from 'react-icons/fa'; // Importing icons
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { FaPlus, FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 
-const Sales = () => {
+const MSales = () => {
+  const [leads, setLeads] = useState([]);
+  const [newLead, setNewLead] = useState({ name: "", email: "", phone: "" });
+
+  const handleAddLead = () => {
+    if (newLead.name && newLead.email && newLead.phone) {
+      setLeads([...leads, newLead]);
+      setNewLead({ name: "", email: "", phone: "" });
+    }
+  };
+
+  const handleDeleteLead = (index: number) => {
+    const updatedLeads = leads.filter((_, i) => i !== index);
+    setLeads(updatedLeads);
+  };
+
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
-        <Link to='/dashboard/allsales_person'>
-          <div className="bg-blue-600 text-white p-6 md:p-8 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 flex items-center justify-between transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 cursor-pointer">
-            <div className="flex items-center space-x-4">
-              <FaUsers className="text-4xl md:text-5xl" />
-              <div>
-                <h2 className="text-lg md:text-2xl font-bold">Available Sales Persons</h2>
-                <p className="mt-1 text-blue-200 text-sm md:text-base">View all sales persons</p>
-              </div>
-            </div>
-            <span className="hidden md:inline text-3xl md:text-4xl text-blue-200">→</span>
-          </div> 
-        </Link>
-        <Link to='/dashboard/sales_personForm'>
-          <div className="bg-green-600 text-white p-6 md:p-8 rounded-lg shadow-lg hover:bg-green-700 transition duration-300 flex items-center justify-between transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500 cursor-pointer">
-            <div className="flex items-center space-x-4">
-              <FaUserPlus className="text-4xl md:text-5xl" />
-              <div>
-                <h2 className="text-lg md:text-2xl font-bold">Create New Sales Person</h2>
-                <p className="mt-1 text-green-200 text-sm md:text-base">Add a new sales person</p>
-              </div>
-            </div>
-            <span className="hidden md:inline text-3xl md:text-4xl text-green-200">+</span>
-          </div>
-        </Link>
-        <Link to='/dashboard/assigntask_sales_person'>
-          <div className="bg-yellow-600 text-white p-6 md:p-8 rounded-lg shadow-lg hover:bg-yellow-700 transition duration-300 flex items-center justify-between transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-500 cursor-pointer">
-            <div className="flex items-center space-x-4">
-              <FaTasks className="text-4xl md:text-5xl" />
-              <div>
-                <h2 className="text-lg md:text-xl font-bold">Assign a Task</h2>
-                <p className="mt-1 text-yellow-200 text-sm md:text-base">Assign tasks to sales persons</p>
-              </div>
-            </div>
-            <span className="hidden lg:inline text-3xl md:text-4xl text-yellow-200">→</span>
-          </div>
-        </Link>
-        <Link to='/dashboard/alltasks_sales_person'>
-          <div className="bg-purple-600 text-white p-6 md:p-8 rounded-lg shadow-lg hover:bg-purple-700 transition duration-300 flex items-center justify-between transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-500 cursor-pointer">
-            <div className="flex items-center space-x-4">
-              <FaList className="text-3xl md:text-4xl" />
-              <div>
-                <h2 className="text-lg md:text-xl font-bold">All Tasks</h2>
-                <p className="mt-1 text-purple-200 text-sm md:text-base">View all tasks</p>
-              </div>
-            </div>
-            <span className="hidden md:inline text-3xl md:text-4xl text-purple-200">→</span>
-          </div>
-        </Link>
+    <div className="min-h-screen bg-gray-100 p-5">
+      {/* Header Section */}
+      <div className="flex justify-between items-center mb-5">
+        <h1 className="text-3xl font-bold text-gray-700">CRM - Manage Leads</h1>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-600"
+          onClick={() => document.getElementById("create-lead")?.scrollIntoView()}
+        >
+          <FaPlus className="mr-2" /> Create New Lead
+        </button>
+      </div>
+
+      {/* Create Lead Section */}
+      <div
+        id="create-lead"
+        className="bg-white shadow-md rounded-lg p-5 mb-10"
+      >
+        <h2 className="text-xl font-semibold mb-4">Create a New Lead</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          <input
+            type="text"
+            placeholder="Lead Name"
+            className="p-2 border border-gray-300 rounded-md"
+            value={newLead.name}
+            onChange={(e) => setNewLead({ ...newLead, name: e.target.value })}
+          />
+          <input
+            type="email"
+            placeholder="Lead Email"
+            className="p-2 border border-gray-300 rounded-md"
+            value={newLead.email}
+            onChange={(e) => setNewLead({ ...newLead, email: e.target.value })}
+          />
+          <input
+            type="tel"
+            placeholder="Lead Phone"
+            className="p-2 border border-gray-300 rounded-md"
+            value={newLead.phone}
+            onChange={(e) => setNewLead({ ...newLead, phone: e.target.value })}
+          />
+        </div>
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+          onClick={handleAddLead}
+        >
+          Add Lead
+        </button>
+      </div>
+
+      {/* Leads List Section */}
+      <div className="bg-white shadow-md rounded-lg p-5">
+        <h2 className="text-xl font-semibold mb-4">All Leads</h2>
+        {leads.length > 0 ? (
+          <table className="min-w-full bg-white border border-gray-200">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">Name</th>
+                <th className="py-2 px-4 border-b">Email</th>
+                <th className="py-2 px-4 border-b">Phone</th>
+                <th className="py-2 px-4 border-b">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leads.map((lead, index) => (
+                <tr key={index} className="text-center">
+                  <td className="py-2 px-4 border-b">{lead.name}</td>
+                  <td className="py-2 px-4 border-b">{lead.email}</td>
+                  <td className="py-2 px-4 border-b">{lead.phone}</td>
+                  <td className="py-2 px-4 border-b flex justify-center space-x-4">
+                    <button className="text-blue-500 hover:text-blue-700">
+                      <FaEye />
+                    </button>
+                    <button className="text-yellow-500 hover:text-yellow-700">
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteLead(index)}
+                    >
+                      <FaTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="text-gray-500">No leads available. Start by adding some!</p>
+        )}
       </div>
     </div>
   );
 };
 
-export default Sales;
+export default MSales;

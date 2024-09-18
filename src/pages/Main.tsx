@@ -10,7 +10,7 @@ import CounselorAll from './CounsellorAll';
 import All_Products from './All_Products';
 import Employee from './Employee';
 import Counselor from './Counselor';
-import Sales from './Sales';
+import Sales from './Sales_person';
 import EmployeeForm from './Form/EmployeeForm';
 import CounselorForm from './Form/CounselorForm';
 import Sales_personAll from './Sales_person_all';
@@ -35,6 +35,8 @@ import TotalSales from './TotalSales';
 import Activeuser from './Activeuser';
 import Notification from './Notification';
 import Viewallnotification from './viewallnotfication'
+import Sales_person from './Sales_person';
+import MSales from './Sales';
 
 const Main = () => {
   return (
@@ -185,11 +187,20 @@ const Main = () => {
           }
         />
         <Route
+          path="/sales_person"
+          element={
+            <>
+              <PageTitle title="Sales_person" />
+              <Sales_person />
+            </>
+          }
+        />
+            <Route
           path="/sales"
           element={
             <>
-              <PageTitle title="Sales " />
-              <Sales />
+              <PageTitle title="Sales" />
+              <MSales/>
             </>
           }
         />
