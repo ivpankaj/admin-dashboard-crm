@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaUserTie, FaEnvelope, FaPhone, FaBuilding, FaDollarSign, FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import userSix from '../images/user/user-06.png'; // Placeholder image
@@ -6,7 +7,7 @@ import userSix from '../images/user/user-06.png'; // Placeholder image
 const api_url = import.meta.env.VITE_API_URL;
 
 interface Employee {
-  employeeId: number;
+  sales_personId: number;
   name: string;
   email: string;
   jobTitle: string;
@@ -20,15 +21,15 @@ interface Employee {
   attendanceCount: number;
 }
 
-
 const EmployeeProfile = () => {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employee, setEmployee] = useState<Employee | null>(null); // Corrected to use null
   const [loading, setLoading] = useState(true);
+  const { sales_personId } = useParams<{ sales_personId: string }>(); // Destructured correctly
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchEmployee = async () => {
       try {
-        const response = await fetch(`${api_url}/api/sales_person/getall`, {
+        const response = await fetch(`${api_url}/api/sales_person/get/${sales_personId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -36,23 +37,27 @@ const EmployeeProfile = () => {
         });
 
         if (response.ok) {
-          const data: Employee[] = await response.json();
-          setEmployees(data);
+          const data: Employee = await response.json();
+          setEmployee(data);
         } else {
-          console.error('Failed to fetch employees');
+          console.error('Failed to fetch employee');
         }
       } catch (error) {
-        console.error('Error fetching employees:', error);
+        console.error('Error fetching employee:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEmployees();
-  }, []);
+    fetchEmployee();
+  }, [sales_personId]); // Added sales_personId to dependency array
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen text-white">Loading...</div>;
+  }
+
+  if (!employee) {
+    return <div className="flex justify-center items-center h-screen text-white">No Employee Data Available</div>;
   }
 
   const EmployeeInfo = ({ employee }: { employee: Employee }) => (
@@ -62,7 +67,7 @@ const EmployeeProfile = () => {
       </h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-md sm:text-lg">
         {[
-          { label: 'Employee Id', value: employee.employeeId, icon: <FaUserTie /> },
+          { label: 'Employee Id', value: employee.sales_personId, icon: <FaUserTie /> },
           { label: 'Full Name', value: employee.name, icon: <FaUserTie /> },
           { label: 'Email', value: employee.email, icon: <FaEnvelope />, onClick: () => window.location.href = `mailto:${employee.email}` },
           { label: 'Phone', value: employee.contactNumber, icon: <FaPhone />, onClick: () => window.location.href = `tel:${employee.contactNumber}` },
@@ -100,12 +105,12 @@ const EmployeeProfile = () => {
           />
           
           <label
-            htmlFor={`profile-${employee.employeeId}`}
+            htmlFor={`profile-${employee.sales_personId}`}
             className="absolute bottom-0 right-0 flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 cursor-pointer items-center justify-center rounded-full bg-gray-800 text-white hover:bg-gray-700 transition duration-300"
           >
-            <input
+             <input
               type="file"
-              id={`profile-${employee.employeeId}`}
+              id={`profile-${employee.sales_personId}`}
               className="sr-only"
             />
             <svg
@@ -139,16 +144,10 @@ const EmployeeProfile = () => {
   return (
     <>
       <Breadcrumb pageName="Profile" />
-      {employees.length > 0 && (
-        <div className="min-h-screen p-8 bg-gray-900">
-          {employees.map((employee) => (
-            <div key={employee.employeeId}>
-              <ProfileSection employee={employee} />
-              <EmployeeInfo employee={employee} />
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="min-h-screen p-8 bg-gray-900">
+        <ProfileSection employee={employee} />
+        <EmployeeInfo employee={employee} />
+      </div>
     </>
   );
 };

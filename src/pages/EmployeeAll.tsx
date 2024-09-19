@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { FaUserTie, FaEnvelope, FaPhone, FaDollarSign, FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 const api_url = import.meta.env.VITE_API_URL;

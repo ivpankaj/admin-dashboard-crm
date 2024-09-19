@@ -39,8 +39,7 @@ import Sales_person from './Sales_person';
 import MSales from './Sales';
 import  EmployeeProfile from './EmployeeProfile';
 import Counselorprofile from './CounselorProfile';
-import SalesPersonAll from './Sales_person_all';
-import salespersonprofile from './Salespersonprofile'
+import Salespersonprofile from './Salespersonprofile'
 
 const Main = () => {
   return (
@@ -79,7 +78,7 @@ const Main = () => {
           element={
             <>
               <PageTitle title="Calendar " />
-              < salespersonprofile />
+              < Salespersonprofile />
             </>
           }
         />

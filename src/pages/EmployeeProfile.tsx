@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaUserTie, FaEnvelope, FaPhone, FaBuilding, FaDollarSign, FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import userSix from '../images/user/user-06.png'; // Placeholder image
@@ -21,13 +22,14 @@ interface Employee {
 }
 
 const EmployeeProfile = () => {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employee, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
+  const { employeeId } = useParams<{ employeeId: string }>(); // Destructured correctly
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch(`${api_url}/api/employee/getAll`, {
+        const response = await fetch(`${api_url}/api/employee/get/${ employeeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +50,7 @@ const EmployeeProfile = () => {
     };
 
     fetchEmployees();
-  }, []);
+  }, [ employeeId]);
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen text-white">Loading...</div>;
@@ -138,16 +140,14 @@ const EmployeeProfile = () => {
   return (
     <>
       <Breadcrumb pageName="Profile" />
-      {employees.length > 0 && (
+    
         <div className="min-h-screen p-8 bg-gray-900">
-          {employees.map((employee) => (
-            <div key={employee.employeeId}>
+         
               <ProfileSection employee={employee} />
               <EmployeeInfo employee={employee} />
             </div>
-          ))}
-        </div>
-      )}
+         
+    
     </>
   );
 };
