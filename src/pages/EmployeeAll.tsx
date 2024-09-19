@@ -109,7 +109,7 @@ const EmployeeAll = () => {
 
               {/* Button to toggle details */}
               <button
-                onClick={() => toggleDetails(employee.employeeId)}
+                onClick={() => navigate(`/dashboard/employeeprofile/${employee.employeeId}`)}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
               >
                 {showDetails[employee.employeeId] ? "Hide Details" : "View All Details"}

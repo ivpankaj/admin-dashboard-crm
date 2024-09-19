@@ -37,6 +37,10 @@ import Notification from './Notification';
 import Viewallnotification from './viewallnotfication'
 import Sales_person from './Sales_person';
 import MSales from './Sales';
+import  EmployeeProfile from './EmployeeProfile';
+import Counselorprofile from './CounselorProfile';
+import SalesPersonAll from './Sales_person_all';
+import salespersonprofile from './Salespersonprofile'
 
 const Main = () => {
   return (
@@ -69,6 +73,26 @@ const Main = () => {
             </>
           }
         />
+
+        <Route
+          path="/salesprofile/:sales_personId"
+          element={
+            <>
+              <PageTitle title="Calendar " />
+              < salespersonprofile />
+            </>
+          }
+        />
+        {/* <Route path="/employeeprofile/:employeeId" element={<EmployeeProfile />} /> */}
+         <Route
+          path="/counselorprofile/:counselorId"
+          element={
+            <>
+              <PageTitle title="Calendar " />
+              <Counselorprofile />
+            </>
+          }
+        />
         <Route
           path="/allemployee"
           element={
@@ -84,6 +108,15 @@ const Main = () => {
             <>
               <PageTitle title="All Sales Person" />
               <Sales_personAll />
+            </>
+          }
+        />
+        <Route
+          path="/employeeprofile/:employeeId"
+          element={
+            <>
+              <PageTitle title="All Sales Person" />
+              < EmployeeProfile />
             </>
           }
         />

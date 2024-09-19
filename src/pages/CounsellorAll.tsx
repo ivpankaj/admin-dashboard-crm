@@ -1,26 +1,14 @@
 import { useEffect, useState } from "react";
-import { FaUserTie, FaEnvelope, FaPhone, FaDollarSign, FaMapMarkerAlt } from "react-icons/fa";
+import { FaUserTie, FaEnvelope } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 const api_url = import.meta.env.VITE_API_URL;
 
 type Counselor = {
-  id: number;
+  counselorId: number;
   name: string;
   email: string;
-  contactNumber: string;
-  jobTitle: string;
-  department: string;
-  hireDate: string;
-  salary: number;
-  address: string;
-  isActive: boolean;
-  attendanceCount: number;
-  qualifications: string | null;
-  yearsOfExperience: number | null;
-  specialty: string | null;
-  counselingSessionsConducted: number;
-  feedbackRating: number | null;
+  // Removed other fields for simplicity
 };
 
 type ProfilePics = {
@@ -35,20 +23,26 @@ const CounselorAll = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${api_url}/api/counselor/getAll`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      try {
+        const response = await fetch(`${api_url}/api/counselor/getAll`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      if (response.ok) {
-        const data: Counselor[] = await response.json();
-        console.log(data);
-        setData(shuffleArray(data));
-        fetchProfilePictures(data); // Fetch profile pictures after counselor data is loaded
+        if (response.ok) {
+          const data: Counselor[] = await response.json();
+          setData(data); // Set data without shuffling
+          await fetchProfilePictures(data); // Fetch profile pictures after counselor data is loaded
+        } else {
+          console.error('Failed to fetch counselor data');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false); // Stop loading when data is fetched or error occurs
       }
-      setLoading(false); // Stop loading when data is fetched
     };
 
     fetchData();
@@ -56,21 +50,28 @@ const CounselorAll = () => {
 
   // Fetch profile pictures for all counselors
   const fetchProfilePictures = async (counselors: Counselor[]) => {
-    const newProfilePics: ProfilePics = {};
+    try {
+      const profilePicPromises = counselors.map(async (counselor) => {
+        const response = await fetch(`${api_url}/api/counselor/get/profilepic/${counselor.counselorId}`);
+        if (response.ok) {
+          const { profilePicture } = await response.json();
+          return { counselorId: counselor.counselorId, profilePicture: `http://localhost:5000${profilePicture}` };
+        } else {
+          console.error(`Failed to fetch profile picture for counselor ${counselor.counselorId}`);
+          return { counselorId: counselor.counselorId, profilePicture: '' }; // Default empty string for missing profile pic
+        }
+      });
 
-    for (const counselor of counselors) {
-      const response = await fetch(`http://localhost:5000/employee/get/profilepic/${counselor.id}`);
-      if (response.ok) {
-        const { profilePicture } = await response.json();
-        newProfilePics[counselor.id] = profilePicture;
-      }
+      const results = await Promise.all(profilePicPromises);
+      const newProfilePics: ProfilePics = results.reduce((acc, { counselorId, profilePicture }) => {
+        acc[counselorId] = profilePicture;
+        return acc;
+      }, {} as ProfilePics);
+
+      setProfilePics(newProfilePics); // Update state with fetched profile pictures
+    } catch (error) {
+      console.error('Error fetching profile pictures:', error);
     }
-
-    setProfilePics(newProfilePics); // Update state with fetched profile pictures
-  };
-
-  const shuffleArray = (array: Counselor[]): Counselor[] => {
-    return array.sort(() => Math.random() - 0.5);
   };
 
   return (
@@ -89,40 +90,28 @@ const CounselorAll = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {alldata.map((counselor) => (
             <div
-              key={counselor.id}
+              key={counselor.counselorId}
               className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1"
             >
-              <div className="flex items-center mb-4">
+              <div className="flex flex-col items-center mb-4">
                 {/* Display profile picture */}
-                {profilePics[counselor.id] ? (
+                {profilePics[counselor.counselorId] ? (
                   <img
-                    src={profilePics[counselor.id]}
+                    src={profilePics[counselor.counselorId]}
                     alt={`${counselor.name}'s profile`}
-                    className="w-16 h-16 rounded-full object-cover mr-4"
+                    className="w-16 h-16 rounded-full object-cover mb-4"
                   />
                 ) : (
-                  <FaUserTie className="text-5xl mr-4" />
+                  <FaUserTie className="text-5xl mb-4" />
                 )}
-                <div>
-                  <h3 className="text-2xl font-bold">{counselor.name}</h3>
-                  <p className="text-sm">
-                    {counselor.jobTitle} - {counselor.department}
-                  </p>
-                </div>
-              </div>
-              <div className="space-y-2 text-base">
-                <p className="flex items-center">
-                  <FaEnvelope className="mr-2" /> {counselor.email}
-                </p>
-                <p className="flex items-center">
-                  <FaPhone className="mr-2" /> {counselor.contactNumber}
-                </p>
-                <p className="flex items-center">
-                  <FaDollarSign className="mr-2" /> Salary: ₹{counselor.salary.toLocaleString()}
-                </p>
-                <p className="flex items-center">
-                  <FaMapMarkerAlt className="mr-2" /> {counselor.address}
-                </p>
+                <h3 className="text-2xl font-bold mb-2">{counselor.name}</h3>
+                <p className="text-sm mb-4">{counselor.email}</p>
+                <button
+                  onClick={() => navigate(`/dashboard/counselorprofile/${counselor.counselorId}`)} // Navigate to detail page
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                >
+                  View All Details
+                </button>
               </div>
             </div>
           ))}
